@@ -9,11 +9,12 @@ const PORT = 7000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Set the static folder for serving HTML, CSS, and JS files
 app.use(express.static(path.join(__dirname, 'views')));
 
-// Route for rendering index1.html
+// Route for rendering home.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'index1.html'));
+    res.sendFile(path.join(__dirname, 'views', 'home.html'));
 });
 
 // Route for rendering messages.html
@@ -21,21 +22,27 @@ app.get('/messages', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'messages.html'));
 });
 
-// POST route for handling messages
+// Existing POST route for storing messages
 app.post('/messages', (req, res) => {
     try {
-        const { message } = req.body;
+        const { name, message } = req.body;
 
         // Validate message
         if (!message || message.trim() === '') {
             return res.status(400).json({ message: 'Message cannot be empty' });
         }
 
-        // Log the message
-        console.log(`Received message: ${message}`);
+        // Get the current time in a readable format
+        const currentTime = new Date().toLocaleString();
 
-        // Save the message to a file
-        fs.appendFile('messages.txt', message + '\n', (err) => {
+        // Log the message details
+        console.log(`Received message from ${name} at ${currentTime}: ${message}`);
+
+        // Prepare the message string
+        const messageString = `Name: ${name}\nTime: ${currentTime}\nMessage: ${message}\n\n`;
+
+        // Save the message with name and time to the messages.txt file
+        fs.appendFile('messages.txt', messageString, (err) => {
             if (err) {
                 console.error(err);
                 return res.status(500).json({ message: 'Failed to save the message' });
@@ -46,6 +53,26 @@ app.post('/messages', (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Error processing the request' });
     }
+});
+
+// Route to retrieve stored messages
+app.get('/getMessages', (req, res) => {
+    fs.readFile('messages.txt', 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading file:', err);
+            return res.status(500).json({ message: 'Failed to retrieve messages' });
+        }
+        // Parse the stored messages (you can format them as JSON if needed)
+        const messages = data.split('\n\n').map(msg => {
+            const lines = msg.split('\n');
+            return {
+                name: lines[0].replace('Name: ', ''),
+                time: lines[1].replace('Time: ', ''),
+                message: lines[2].replace('Message: ', '')
+            };
+        });
+        res.json({ messages });
+    });
 });
 
 // Route for rendering register.html
@@ -83,3 +110,4 @@ DOB: ${dob}
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
+
