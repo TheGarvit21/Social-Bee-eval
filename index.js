@@ -9,42 +9,39 @@ const PORT = 7000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Route for rendering home.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'home.html'));
+    res.sendFile(path.join(__dirname, 'public', 'home.html'));
 });
 
-// Route for rendering messages.html
 // Route for rendering messages.html
 app.get('/messages', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'messages.html'));
+    res.sendFile(path.join(__dirname, 'public', 'messages.html'));
 });
 
-// Serve static files
-app.use(express.static(path.join(__dirname, 'views')));
+// Route for rendering explore.html
+app.get('/explore', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'explore.html'));
+});
 
-
-// Existing POST route for storing messages
+// POST route for handling messages
 app.post('/messages', (req, res) => {
     try {
-        const { name, message } = req.body;
+        const { message } = req.body;
 
         // Validate message
         if (!message || message.trim() === '') {
             return res.status(400).json({ message: 'Message cannot be empty' });
         }
 
-        // Get the current time in a readable format
-        const currentTime = new Date().toLocaleString();
+        // Log the message
+        console.log(`Received message: ${message}`);
 
-        // Log the message details
-        console.log(`Received message from ${name} at ${currentTime}: ${message}`);
-
-        // Prepare the message string
-        const messageString = `Name: ${name}\nTime: ${currentTime}\nMessage: ${message}\n\n`;
-
-        // Save the message with name and time to the messages.txt file
-        fs.appendFile('messages.txt', messageString, (err) => {
+        // Save the message to a file
+        fs.appendFile('messages.txt', message + '\n', (err) => {
             if (err) {
                 console.error(err);
                 return res.status(500).json({ message: 'Failed to save the message' });
@@ -57,29 +54,9 @@ app.post('/messages', (req, res) => {
     }
 });
 
-// Route to retrieve stored messages
-app.get('/getMessages', (req, res) => {
-    fs.readFile('messages.txt', 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading file:', err);
-            return res.status(500).json({ message: 'Failed to retrieve messages' });
-        }
-        // Parse the stored messages (you can format them as JSON if needed)
-        const messages = data.split('\n\n').map(msg => {
-            const lines = msg.split('\n');
-            return {
-                name: lines[0].replace('Name: ', ''),
-                time: lines[1].replace('Time: ', ''),
-                message: lines[2].replace('Message: ', '')
-            };
-        });
-        res.json({ messages });
-    });
-});
-
 // Route for rendering register.html
 app.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'register.html'));
+    res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
 
 app.post('/register', (req, res) => {
@@ -108,9 +85,6 @@ DOB: ${dob}
     // Redirect to the homepage after registration
     res.redirect('/');
 });
-
-// Set the static folder for serving HTML, CSS, and JS files
-app.use(express.static(path.join(__dirname, 'views')));
 
 // Start the server
 app.listen(PORT, () => {
