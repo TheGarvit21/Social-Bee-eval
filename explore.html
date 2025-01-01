@@ -26,17 +26,26 @@
         }
 
         .search-bar {
-            transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            transition: transform 0.5s ease-in-out,
+                opacity 0.5s ease-in-out,
+                max-height 0.7s ease-in-out;
+            overflow: hidden;
+            max-height: 0;
+            /* Start with 0 height when collapsed */
         }
 
         .hidden-search {
             transform: translateY(-30px);
             opacity: 0;
+            max-height: 0;
+            /* Collapsed state */
         }
 
         .visible-search {
             transform: translateY(0);
             opacity: 1;
+            max-height: 300px;
+            /* Expandable value, adjust based on your content height */
         }
 
         .category-tag {
@@ -55,7 +64,7 @@
     <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 z-50">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="text-xl font-semibold text-gray-800">Social Feed</div>
+                <div class="text-xl font-semibold text-gray-800">Recommended for you</div>
                 <button id="toggle-search" class="p-2 rounded-full text-gray-600 hover:text-gray-800">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
@@ -213,6 +222,14 @@
             }
         };
         const postGrid = document.getElementById('post-grid');
+        const toggleSearchButton = document.getElementById('toggle-search');
+        const searchBarContainer = document.getElementById('search-bar-container');
+        const searchSection = document.getElementById('search-section');
+
+        toggleSearchButton.addEventListener('click', () => {
+            searchBarContainer.classList.toggle('visible');
+            searchSection.classList.toggle('visible');
+        });
 
         let currentPage = 0;
         const postsPerPage = 6;
