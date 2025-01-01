@@ -1,9 +1,0 @@
-Name: Bhavin Jain
-Email: bhavinjain2705@gmail.com
-Password: 123654
-DOB: 2004-10-12
-
-Name: Bhavin Jain
-Email: abc@gmail.com
-Password: 123456789
-DOB: 2003-11-10
