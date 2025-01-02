@@ -11,8 +11,13 @@
 </head>
 
 <style>
+    html {
+        overflow-x: hidden;
+    }
+
     #main-section {
         margin-top: 3rem;
+        margin-left: 25%;
     }
 
     .nav-link {
@@ -203,6 +208,7 @@
         max-height: 1000px;
         overflow-y: auto;
         width: 28%;
+        margin-right: -50px;
     }
 
     /* Custom CSS to fix button spacing issue */
@@ -238,8 +244,48 @@
         /* Allow wrapping */
     }
 
-    #middle-section {
+    /* #middle-section {
         width: 46%;
+    } */
+
+    #left-section {
+        width: 25%;
+        /* Width of the left section */
+        position: fixed;
+        top: 4rem;
+        left: 0;
+        height: calc(100vh - 4rem);
+        overflow-y: auto;
+        z-index: 10;
+        background-color: white;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+    }
+
+    #right-section {
+        position: fixed;
+        top: 4rem;
+        right: 0;
+        width: 29%;
+        /* Width of the right section */
+        height: calc(100vh - 4rem);
+        overflow-y: auto;
+        background-color: white;
+        z-index: 10;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+    }
+
+    #middle-section {
+        position: absolute;
+        top: 4rem;
+        left: 25%;
+        /* Starts after the left section */
+        right: 25%;
+        /* Leaves space for the right section */
+        padding: 1rem;
+        background-color: #f9f9f9;
+        min-height: calc(100vh - 4rem);
     }
 </style>
 
@@ -327,7 +373,7 @@
     <main class="container mx-auto py-6 " id="main-section">
         <div class="flex flex-wrap">
             <!-- Left Section -->
-            <div class="w-full md:w-1/4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg h-full  ">
+            <div class="w-full md:w-1/4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg h-full " id="left-section">
                 <!-- Profile & Navigation Section -->
                 <div class="mb-8 pb-6 border-b border-gray-200 dark:border-gray-700">
                     <a href="#"
