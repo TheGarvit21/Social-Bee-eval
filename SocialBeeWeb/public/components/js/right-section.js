@@ -86,7 +86,7 @@ const initializeFriendRequests = async () => {
     // Fetch random users from randomuser.me
     const fetchFriendRequests = async (count) => {
         try {
-            const response = await fetch(`https://randomuser.me/api/?results=${count}`);
+            const response = await fetch(`https://randomuser.me/api/?results=${count}&nat=in`);
             const data = await response.json();
             return data.results.map((user) => ({
                 name: `${user.name.first} ${user.name.last}`,

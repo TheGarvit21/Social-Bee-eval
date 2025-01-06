@@ -156,8 +156,8 @@ function initializeSidebar() {
     // Update user profile
     document.getElementById('userName').textContent = userData.name;
     document.getElementById('userHandle').textContent = userData.handle;
-    document.getElementById('currentStreak').textContent = userData.streak;
-    document.getElementById('userLevel').textContent = userData.level;
+    // document.getElementById('currentStreak').textContent = userData.streak;
+    // document.getElementById('userLevel').textContent = userData.level;
 
     // Update notification counts
     // const notifDot = document.getElementById('notifCount');

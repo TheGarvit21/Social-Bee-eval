@@ -214,8 +214,8 @@ html {
 #right-section {
     max-height: 1000px;
     overflow-y: auto;
-    width: 28%;
-    margin-right: -50px;
+    width: 26%;
+    margin-right: -24px;
 }
 
 /* Custom CSS to fix button spacing issue */
