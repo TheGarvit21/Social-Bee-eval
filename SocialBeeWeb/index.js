@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Route for rendering home.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'home.html'));
+    res.sendFile(path.join(__dirname, 'public', 'home1.html'));
 });
 
 // Route for rendering messages.html
