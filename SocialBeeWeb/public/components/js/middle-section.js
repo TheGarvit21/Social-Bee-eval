@@ -65,8 +65,27 @@ createPostModal.addEventListener('click', (e) => {
 submitPostBtn.addEventListener('click', () => {
     const content = postContent.value.trim();
     if (content) {
-        console.log('Creating post:', content);
+        const newPost = {
+            id: new Date().getTime().toString(), // Unique ID
+            content: content,
+            date: new Date().toISOString(),
+        };
+
+        // Retrieve existing posts from localStorage
+        let posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+        // Add the new post to the array
+        posts.push(newPost);
+
+        // Save updated posts array back to localStorage
+        localStorage.setItem('posts', JSON.stringify(posts));
+
+        // Close modal and reset fields
         toggleModal(false);
+
+        console.log('Post created:', newPost);
+    } else {
+        alert('Please write something!');
     }
 });
 
@@ -199,6 +218,50 @@ const initializeFeelings = () => {
     });
 };
 
+// Bookmark Feature
+function addBookmarkButton(postElement, post) {
+    const actionDiv = postElement.querySelector('.mt-4.flex.justify-between');
+    const bookmarkButton = document.createElement('button');
+    bookmarkButton.classList.add('bookmark-btn');
+
+    const isBookmarked = checkIfBookmarked(post.id);
+    updateBookmarkButton(bookmarkButton, isBookmarked);
+
+    bookmarkButton.addEventListener('click', () => toggleBookmark(post, bookmarkButton));
+    actionDiv.appendChild(bookmarkButton);
+}
+
+function updateBookmarkButton(button, isBookmarked) {
+    button.innerHTML = isBookmarked ?
+        '<svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>' :
+        '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>';
+}
+
+function checkIfBookmarked(postId) {
+    const bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+    return bookmarks.some(bookmark => bookmark.id === postId);
+}
+
+function toggleBookmark(post, bookmarkButton) {
+    let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+    const isBookmarked = checkIfBookmarked(post.id);
+
+    if (isBookmarked) {
+        bookmarks = bookmarks.filter(bookmark => bookmark.id !== post.id);
+    } else {
+        const bookmarkData = {
+            ...post,
+            bookmarkedAt: new Date().toISOString(),
+            comments: [],
+            isLiked: false
+        };
+        bookmarks.push(bookmarkData);
+    }
+
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+    updateBookmarkButton(bookmarkButton, !isBookmarked);
+}
+
 // Media Buttons Feature
 const initializeMediaButtons = () => {
     const mediaButtons = document.querySelectorAll('button:has(svg path[d*="M4 16l4.586-4.586"])');
@@ -225,6 +288,7 @@ const initializeMediaButtons = () => {
     });
 };
 
+// Initialize Features
 initializeStories();
 initializeFeelings();
 initializeMediaButtons();

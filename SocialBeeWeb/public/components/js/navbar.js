@@ -41,3 +41,4 @@ document.querySelectorAll('.decline-btn').forEach(btn => {
         friendRequest.querySelector('.decline-btn').disabled = true;
     });
 });
+

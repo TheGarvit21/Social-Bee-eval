@@ -15,10 +15,10 @@ const togglePostButton = () => {
     postButton.disabled = !isValid;
 };
 
-createPostButton.addEventListener('click', () => {
-    createPostModal.classList.remove('hidden');
-    togglePostButton();
-});
+// createPostButton.addEventListener('click', () => {
+//     createPostModal.classList.remove('hidden');
+//     togglePostButton();
+// });
 
 [cancelPostButton, closeModalButton].forEach(button => button.addEventListener('click', closeModal));
 
