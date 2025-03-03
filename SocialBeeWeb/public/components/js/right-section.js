@@ -102,52 +102,51 @@ const initializeFriendRequests = async () => {
     let requests = await fetchFriendRequests(4); // Fetch 4 random friend requests
     updateFriendRequests(requests);
 };
-
 // Trending Section
 const initializeTrending = () => {
     const container = document.getElementById('trending-container');
     const refreshBtn = document.getElementById('refresh-trends');
 
     const updateTrendingTopics = (topics) => {
-        container.innerHTML = '';
+        container.innerHTML = ''; // Clear existing topics
         topics.forEach((topic, index) => {
             const topicElement = createTrendingTopicElement(topic);
             container.appendChild(topicElement);
-            setTimeout(() => slideIn(topicElement), index * 100);
+            setTimeout(() => fadeIn(topicElement), index * 100); // Add fade-in animation
         });
     };
 
     const createTrendingTopicElement = (topic) => {
         const div = document.createElement('div');
         div.className =
-            'bg-white dark:bg-gray-600 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200';
-        div.innerHTML = `
-        <p class="font-medium text-gray-800 dark:text-gray-100">#${topic.tag}</p>
-        <p class="text-sm text-gray-500 dark:text-gray-400">${topic.posts} posts</p>
-      `;
+            'trending-topic bg-blue-500 text-white rounded-full px-4 py-2 text-sm hover:bg-blue-600 transition cursor-pointer';
+        div.textContent = `${topic.tag}`; // Only display the topic name
         return div;
     };
 
     const mockTrends = [
-        { tag: 'Technology', posts: '10.5K' },
-        { tag: 'Innovation', posts: '8.2K' },
-        { tag: 'Design', posts: '6.7K' },
-        { tag: 'Health', posts: '9.1K' },
-        { tag: 'Fitness', posts: '7.3K' },
+        { tag: 'Technology' },
+        { tag: 'Innovation' },
+        { tag: 'Design' },
+        { tag: 'Health' },
+        { tag: 'Fitness' },
+        { tag: 'Gaming' },
+        { tag: 'Sports' },
     ];
 
     refreshBtn.addEventListener('click', () => {
-        refreshBtn.classList.add('animate-spin');
+        refreshBtn.classList.add('animate-spin'); // Add spin animation to refresh button
         setTimeout(() => {
             refreshBtn.classList.remove('animate-spin');
             const newTopics = mockTrends
                 .sort(() => Math.random() - 0.5)
-                .slice(0, 3); // Select 3 random topics
+                .slice(0, 6); // Select 5 random topics
             updateTrendingTopics(newTopics);
         }, 1000);
     });
 
-    updateTrendingTopics(mockTrends.slice(0, 3));
+    // Initial load with 5 random topics
+    updateTrendingTopics(mockTrends.slice(0, 6));
 };
 
 // Recent Activity Section
